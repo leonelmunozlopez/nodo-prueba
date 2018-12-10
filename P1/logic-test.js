@@ -86,14 +86,7 @@ function listTeamsByCountry() {
 
 // 2 Arreglo con los nombres de los equipos ordenados de mayor a menor por la cantidad de victorias en champions league.
 function sortTeamsByWins() {
-	let winsForTeam = [...teams];
-
-	winsForTeam.map((team, key) => {
-		winsForTeam[key].wins = winsByTeams.find(
-			win => win.teamId === team.id
-		).wins;
-	});
-	return winsForTeam.sort((a, b) => b.wins - a.wins).map(team => team.name);
+	return getTeamsByWins(teams, winsByTeams);
 }
 
 // 3 Arreglo de objetos en donde se muestre el nombre de las ligas y la sumatoria de las victorias de los equipos que pertenecen a ellas.
@@ -227,14 +220,7 @@ function newTeamRanking() {
 	teamsByLeagueCopy.push({teamId: 14, leagueId: 7});
 	winsByTeamsCopy.push({teamId: 14, wins: 4});
 
-	// TODO: refactor this
-	let winsForTeam = [...teamsCopy];
-	winsForTeam.map((team, key) => {
-		winsForTeam[key].wins = winsByTeamsCopy.find(
-			win => win.teamId === team.id
-		).wins;
-	});
-	return winsForTeam.sort((a, b) => b.wins - a.wins).map(team => team.name);
+	return getTeamsByWins(teamsCopy, winsByTeamsCopy);
 }
 
 // 9 Realice una función que retorne una promesa con los nombres de los equipos en upper case.
@@ -279,7 +265,7 @@ console.log(newTeamRanking());
 console.log('Pregunta 9');
 console.log(getTeamsNamesAsUpperCase());
 
-// Custom method
+// Custom methods
 function getTeamsWithMoreData() {
 	let response = [...teams];
 	response.map((team, key) => {
@@ -292,4 +278,11 @@ function getTeamsWithMoreData() {
 		).wins;
 	});
 	return response;
+}
+
+function getTeamsByWins(teams, wins) {
+	teams.map((team, key) => {
+		teams[key].wins = wins.find(win => win.teamId === team.id).wins;
+	});
+	return teams.sort((a, b) => b.wins - a.wins).map(team => team.name);
 }
