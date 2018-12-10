@@ -131,23 +131,12 @@ function leaguesWithWins() {
 // 4 Objeto en que las claves sean los nombres de las ligas y los valores el nombre del equipo con la menor cantidad de victorias en champions.
 function leaguesWithTeamWithLestWins() {
 	let badTeamByLeague = {};
-
-	// TODO: Maybe I should refact this for later
-	let teamsWithMoreInformation = [...teams];
-	teamsWithMoreInformation.map((team, key) => {
-		teamsWithMoreInformation[key].leagueId = teamsByLeague.find(
-			tl => tl.teamId === team.id
-		).leagueId;
-
-		teamsWithMoreInformation[key].wins = winsByTeams.find(
-			win => win.teamId === team.id
-		).wins;
-	});
-	teamsWithMoreInformation.sort((a, b) => a.wins - b.wins);
+	let teamsWithMoreData = getTeamsWithMoreData();
+	teamsWithMoreData.sort((a, b) => a.wins - b.wins);
 
 	leagues.map(league => {
 		// Find first team, already sorted by less wins
-		badTeamByLeague[league.name] = teamsWithMoreInformation.find(
+		badTeamByLeague[league.name] = teamsWithMoreData.find(
 			team => team.leagueId === league.id
 		).name;
 	});
@@ -158,23 +147,12 @@ function leaguesWithTeamWithLestWins() {
 // 5 Objeto en que las claves sean los nombres de las ligas y los valores el nombre del equipo con la mayor cantidad de victorias en champions.
 function leaguesWithTeamWithMostWins() {
 	let bestTeamByLeague = {};
-
-	// TODO: again.. refactor this
-	let teamsWithMoreInformation = [...teams];
-	teamsWithMoreInformation.map((team, key) => {
-		teamsWithMoreInformation[key].leagueId = teamsByLeague.find(
-			tl => tl.teamId === team.id
-		).leagueId;
-
-		teamsWithMoreInformation[key].wins = winsByTeams.find(
-			win => win.teamId === team.id
-		).wins;
-	});
-	teamsWithMoreInformation.sort((a, b) => b.wins - a.wins);
+	let teamsWithMoreData = getTeamsWithMoreData();
+	teamsWithMoreData.sort((a, b) => b.wins - a.wins);
 
 	leagues.map(league => {
 		// Find first team, already sorted by more wins
-		bestTeamByLeague[league.name] = teamsWithMoreInformation.find(
+		bestTeamByLeague[league.name] = teamsWithMoreData.find(
 			team => team.leagueId === league.id
 		).name;
 	});
@@ -300,3 +278,18 @@ console.log('Pregunta 8');
 console.log(newTeamRanking());
 console.log('Pregunta 9');
 console.log(getTeamsNamesAsUpperCase());
+
+// Custom method
+function getTeamsWithMoreData() {
+	let response = [...teams];
+	response.map((team, key) => {
+		response[key].leagueId = teamsByLeague.find(
+			tl => tl.teamId === team.id
+		).leagueId;
+
+		response[key].wins = winsByTeams.find(
+			win => win.teamId === team.id
+		).wins;
+	});
+	return response;
+}
